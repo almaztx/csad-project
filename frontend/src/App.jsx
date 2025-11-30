@@ -5,6 +5,9 @@ import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import { AuthContext } from "./context/AuthContext";
 import { useContext } from "react";
+import Feed from "./pages/Feed";
+import Profile from "./pages/Profile";
+import PostPage from "./pages/PostPage";
 
 function ProtectedRoute({ children }) {
     const { token } = useContext(AuthContext);
@@ -44,6 +47,17 @@ function App() {
                 }
             />
             <Route path="/" element={<Navigate to="/dashboard" />} />
+
+            <Route path="/feed" element={<Feed />} />
+            <Route
+                path="/profile"
+                element={
+                    <ProtectedRoute>
+                        <Profile />
+                    </ProtectedRoute>
+                }
+            />
+            <Route path="/post/:id" element={<PostPage />} />
         </Routes>
     );
 }
