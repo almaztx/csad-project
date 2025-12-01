@@ -28,3 +28,8 @@ export const getCommentCount = (postId) =>
     axios
         .get(`${API_URL}/posts/${postId}/comments`)
         .then((res) => res.data.length);
+
+export const deleteComment = (token, postId, commentId) =>
+    axios.delete(`${API_URL}/posts/${postId}/comments/${commentId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });

@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { login } from "../api/auth";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { popRedirectPath } from "../utils/redirect";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -14,28 +15,46 @@ export default function Login() {
         try {
             const data = await login(email, password);
             setToken(data.token);
-            navigate("/dashboard");
+            const redirectTo = popRedirectPath(); // ⬅ вернётся туда, где был
+            navigate(redirectTo);
         } catch (err) {
-            alert("Login failed");
+            alert("Неверные данные");
         }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>Login</h2>
-            <input
-                type="email"
-                placeholder="Email"
-                onChange={(e) => setEmail(e.target.value)}
-                required
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                onChange={(e) => setPassword(e.target.value)}
-                required
-            />
-            <button type="submit">Login</button>
-        </form>
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <form
+                onSubmit={handleSubmit}
+                className="bg-white shadow-md rounded-xl p-8 w-full max-w-sm space-y-6"
+            >
+                <h2 className="text-2xl font-bold text-center text-gray-800">
+                    Вход
+                </h2>
+
+                <input
+                    type="email"
+                    placeholder="Email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+
+                <input
+                    type="password"
+                    placeholder="Пароль"
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+
+                <button
+                    type="submit"
+                    className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition"
+                >
+                    Войти
+                </button>
+            </form>
+        </div>
     );
 }

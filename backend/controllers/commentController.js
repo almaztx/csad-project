@@ -23,3 +23,19 @@ exports.getComments = async (req, res) => {
         res.status(500).json({ msg: "Server error" });
     }
 };
+
+exports.deleteComment = async (req, res) => {
+    try {
+        const comment = await Comment.findById(req.params.commentId);
+        if (!comment) return res.status(404).json({ msg: "Comment not found" });
+
+        if (comment.author.toString() !== req.user) {
+            return res.status(403).json({ msg: "Not your comment" });
+        }
+
+        await Comment.findByIdAndDelete(req.params.commentId);
+        res.json({ msg: "Comment deleted" });
+    } catch (err) {
+        res.status(500).json({ msg: "Server error" });
+    }
+};
